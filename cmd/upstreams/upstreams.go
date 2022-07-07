@@ -32,12 +32,14 @@ func main() {
 		go upstreams[ii].run(ctx)
 	}
 
+	// TODO: add signal to print current number of connections per upstream
 	fmt.Printf("running %d listeners starting at port %d...\n", *count, *startPort)
 	fmt.Printf("press ctrl-c to quit and print stats\n")
 	<-ctx.Done()
 	fmt.Println()
 	for i := range upstreams {
-		fmt.Printf("Upstream %d: %d connections\n", i, atomic.LoadInt64(&upstreams[i].count))
+		fmt.Printf("Upstream %d: served %d total connections\n",
+			i, atomic.LoadInt64(&upstreams[i].count))
 	}
 }
 
